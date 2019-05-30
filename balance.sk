@@ -1,0 +1,62 @@
+command /eco [<text>] [<offlineplayer>] [<integer>]:
+    permission: admin
+    trigger:
+        if arg-1 isn't set:
+            send "&6Error: &e/eco [Give | Take | Reset] [Player] [Amount]" to player
+        else if arg-1 is "give":
+            if arg-2 is set:
+                if arg-3 > 0:
+                    add arg-3 to {balance.%arg-2's uuid%}
+                    send "&6%arg-3% &eadded to &6%arg-2%'s &ebalance." to player
+                else:
+                    send "&eYou must add more than 0." to player
+            else:
+                send "&eYou must select a player." to player
+        else if arg-1 is "take" or "remove":
+            if arg-2 is set:
+                if arg-3 > 0:
+                    remove arg-3 from {balance.%arg-2's uuid%}
+                    send "&eYou removed &6%arg-3% &efrom &6%arg-2%'s &ebalance." to player
+            else:
+                send "&eYou must select a player." to player
+        else if arg-1 is "reset" or "restart":
+            if arg-2 is set:
+                if arg-3 isn't set:
+                    send "&eYou have reset &6%arg-2%'s &ebalance." to player
+                    set {balance.%arg-2's uuid%} to 0
+            else:
+                send "&eYou must select a player." to player
+ on rightclick on player:
+   execute player command "/shop"
+command /shop:
+    trigger:
+        set {h1} to "%player%" parsed as offlineplayer
+        open virtual chest inventory with size 5 named "&6Gold Shop" to player
+        loop integers from 0 to 44:
+            make gui slot loop-value of player with yellow glass pane named " " to do nothing
+        make gui slot 4 of player with {h1}'s skull named "&e%player%" with lore "&eBalance: &6&o%{balance.%player's uuid%}% || &eCurrent Menu: &6Gold Shop" to do nothing
+        make gui slot 10 of player with iron helmet named "&fFull Iron Set" with lore "&7||&8» &ePrice: &f$1500000 Gold||&8» &eClick to buy" to run:
+            close player's inventory
+            if {balance.%player's uuid%} >= 1500000:
+                remove 1500000 from {balance.%player's uuid%}
+                equip player with iron helmet
+                equip player with iron chestplate
+                if type of player's leggings are leather leggings:
+                    stop
+                else:
+                    equip player with iron leggings
+                equip player with iron boots
+                send "&4[{(&cThePitPvP&4)}] &7You have purchased the Iron Full Set" to player
+            else:
+                send "&eYou do not have enough money to make this transaction!" to player
+        make gui slot 12 of player with diamond sword named "&bDiamond Sword" with lore "&7||&8» &ePrice: &f$150 Gold ||&8» &eClick to buy" to run:
+            close player's inventory 
+            if {balance.%player's uuid%} >= 150:
+                remove 150 from {balance.%player's uuid%}
+                give player 1 diamond sword named "&bDiamond Sword"
+            else:
+                send "&eYou do not have enough money to make this transaction!" to player
+on join:
+   if {balance.%player's uuid%} is not set:
+      set {balance.%player's uuid%} to 0
+                

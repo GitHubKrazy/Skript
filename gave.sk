@@ -1,0 +1,405 @@
+on chat:
+   cancel event
+   if player has permission "admin.chat":
+      broadcast "%{suffix::%player's uuid%}% &7[&b%{level::%player's uuid%}%&7] %player%&f: %colored message%"
+   else:
+      broadcast "%{suffix::%player's uuid%}% &7[&b%{level::%player's uuid%}%&7] %player%&f: %colored message%"
+command /owner <player>:
+    permission: owner.sk
+    permission message: &cInsufficient permissions!
+    trigger:
+        set {suffix::%arg-1's uuid%} to "&4O-STAFF"
+command /admin <player>:
+    permission: owner.sk
+    permission message: &cInsufficient permissions!
+    trigger:
+        set {suffix::%arg-1's uuid%} to "&4A-STAFF"
+command /mod <player>:
+    permission: owner.sk
+    permission message: &cInsufficient permissions!
+    trigger:
+        set {suffix::%arg-1's uuid%} to "&eM-STAFF"
+command /mhstaff <player>:
+    permission: owner.sk
+    permission message: &cInsufficient permissions!
+    trigger:
+        set {suffix::%arg-1's uuid%} to "&bMH-STAFF"
+command /skr:
+    permission: sk.reload
+    permission message: &cInsufficient permissions!
+    trigger:
+        execute player command "/sk reload Gave"
+on first join:
+        set {suffix::%player's uuid%} to "&8DEFAULT"
+command /setspawn:
+    permission: spawn.sk
+    permission message: &cInsufficient permissions!
+    trigger:
+        set {hub} to player's location
+        send "&2({[&aGAVE&2]}) &7The spawn has been set!"
+        broadcast "&2({[&aGAVE&2]}) &7The spawn has been set by %player%!"
+command /spawn:
+    trigger:
+        teleport player to {hub}
+        send "&2({[&aGAVE&2]}) &7You have been teleported to &2({[&aGAVE&2]}) &7spawnpoint."
+on join:
+   teleport player to {hub}
+   send "&2({[&aGAVE&2]}) &7You have been teleported to &2({[&aGAVE&2]}) &7spawnpoint."
+on respawn:
+   teleport player to {hub}
+   send "&4&2({[&aGAVE&2]}) &7You have been teleported to &2({[&aGAVE&2]}) &7spawnpoint."
+
+command /gmc [<offline player>]:
+    permission: essentials.gmc
+    permission message: &cInsufficient permissions!
+    aliases: /creative
+    trigger:
+        if arg 1 is not set:
+            send "&2({[&aGAVE&2]}) &7You have set your own gamemode to creative."
+            set player's gamemode to creative
+        else:
+            send "&2({[&aGAVE&2]}) &7You have set %arg-1%'s gamemode to creative."
+            set arg-1's gamemode to creative
+            send "&2({[&aGAVE&2]}) &7%player% has set your gamemode to creative." to arg-1
+
+command /gms [<offline player>]:
+    permission: essentials.gms
+    permission message: &cInsufficient permissions!
+    aliases: /survival
+    trigger:
+        if arg 1 is not set:
+            send "&2({[&aGAVE&2]}) &7You have set your own gamemode to survival."
+            set player's gamemode to survival
+        else:
+            send "&2({[&aGAVE&2]}) &7You have set %arg-1%'s gamemode to survival."
+            set arg-1's gamemode to survival
+            send "&2({[&aGAVE&2]}) &7%player% has set your gamemode to survival." to arg-1
+
+
+command /gmsp [<offline player>]:
+    permission: essentials.gmsp
+    permission message: &cInsufficient permissions!
+    aliases: /spectator
+    trigger:
+        if arg 1 is not set:
+            send "&2({[&aGAVE&2]}) &7You have set your own gamemode to spectator."
+            set player's gamemode to spectator
+        else:
+            send "&2({[&aGAVE&2]}) &7You have set %arg-1%'s gamemode to spectator."
+            set arg-1's gamemode to spectator
+            send "&2({[&aGAVE&2]}) &7%player% has set your gamemode to spectator." to arg-1
+
+command /gma [<offline player>]:
+    permission: essentials.gma
+    permission message: &cInsufficient permissions!
+    trigger:
+        if arg 1 is not set:
+            send "&2({[&aGAVE&2]}) &7You have set your own gamemode to adventure."
+            set player's gamemode to adventure
+        else:
+            send "&2({[&aGAVE&2]}) &7You have set %arg-1%'s gamemode to adventure."
+            set arg-1's gamemode to adventure
+            send "&2({[&aGAVE&2]}) &7%player% has set your gamemode to adventure." to arg-1
+on first join:
+    set {warns.%player%} to 0
+
+command /warn <offline player> <text>:
+    permission: tpp.warn
+    permission message: &cInsufficient permissions!
+    trigger:
+        add 1 to {warns.%arg 1%}
+        if {warns.%arg 1%} >= 5:
+            send "&2({[&aGAVE&2]}) &7You have been warned more than 5 times... Staff will be alerted." to arg-1
+            set {warns.%arg 1%} to 0
+            loop all players:
+                if loop-player has permission "tpp.warn":
+                    send "&2({[&aGAVE&2]}) &7%arg-1% has been warned more than 5 times." to loop-player
+        loop all players:
+            send "&8&m-----------------------------" to loop-player
+            send "&c%arg 1% has been warned for &c%arg 2%. They now have %{warns.%arg 1%}% warns." to loop-player
+            send "&8&m-----------------------------" to loop-player
+on join:
+   teleport player to {hub}
+
+on death:
+   if type of player's helm is leather helmet:
+      stop
+   else:
+      set player's helmet to air
+   set player's chestplate to air
+   if type of player's leggings are leather leggings:
+      stop
+   else:
+      if type of player's leggings are golden leggings:
+         stop
+      else:
+         set player's leggings to air
+   set player's boots to air
+on death:
+   remove diamond sword from player's inventory
+   remove iron sword from player's inventory
+   if type of player's helm is diamond helmet or iron helmet:
+      set player's helmet to air
+   if type of player's chestplate is diamond chestplate:
+      set player's chestplate to air
+   if type of player's leggings are diamond leggings:
+      set player's leggings to air
+   if type of player's boots are diamond boots:
+      set player's boots to air
+      
+   
+
+on death:
+   send "&c&lDEATH! &7By %attacker%" to victim
+   send "&a&lKILL! &7On %victim% &e+&6%{neededxp2::%attacker's uuid%}% gold" to attacker
+on death:
+   if player is not wearing leather leggings:
+      equip player with chain leggings
+      equip player with iron boots
+      equip player with iron chestplate
+      give player 1 iron sword named "&fIron Sword"
+   else:
+      equip player with chain boots
+      equip player with iron chestplate
+      give player 1 iron sword named "&fIron Sword"
+on rightclick on player:
+   execute player command "/shop"
+command /shop:
+    trigger:
+        set {h1} to "%player%" parsed as offlineplayer
+        open virtual chest inventory with size 5 named "&6Gold Shop" to player
+        loop integers from 0 to 44:
+            make gui slot loop-value of player with yellow glass pane named " " to do nothing
+        make gui slot 4 of player with {h1}'s skull named "&e%player%" with lore "&eBalance: &6&o%{balance.%player's uuid%}% || &eCurrent Menu: &6Gold Shop" to do nothing
+        make gui slot 10 of player with iron helmet named "&fFull Iron Set" with lore "&7||&8» &ePrice: &f$1500000 Gold||&8» &eClick to buy" to run:
+            close player's inventory
+            if {balance.%player's uuid%} >= 1500000:
+                remove 1500000 from {balance.%player's uuid%}
+                equip player with iron helmet
+                equip player with iron chestplate
+                if type of player's leggings are leather leggings:
+                    stop
+                else:
+                    equip player with iron leggings
+                equip player with iron boots
+                send "&4[{(&cThePitPvP&4)}] &7You have purchased the Iron Full Set" to player
+            else:
+                send "&eYou do not have enough money to make this transaction!" to player
+        make gui slot 12 of player with diamond sword named "&bDiamond Sword" with lore "&7||&8» &ePrice: &f$150 Gold ||&8» &eClick to buy" to run:
+            close player's inventory 
+            if {balance.%player's uuid%} >= 150:
+                remove 150 from {balance.%player's uuid%}
+                give player 1 diamond sword named "&bDiamond Sword"
+            else:
+                send "&eYou do not have enough money to make this transaction!" to player
+on join:
+   if {balance.%player's uuid%} is not set:
+      set {balance.%player's uuid%} to 0
+command /eco [<text>] [<offlineplayer>] [<integer>]:
+    permission: admin
+    trigger:
+        if arg-1 isn't set:
+            send "&6Error: &e/eco [Give | Take | Reset] [Player] [Amount]" to player
+        else if arg-1 is "give":
+            if arg-2 is set:
+                if arg-3 > 0:
+                    add arg-3 to {balance.%arg-2's uuid%}
+                    send "&6%arg-3% &eadded to &6%arg-2%'s &ebalance." to player
+                else:
+                    send "&eYou must add more than 0." to player
+            else:
+                send "&eYou must select a player." to player
+        else if arg-1 is "take" or "remove":
+            if arg-2 is set:
+                if arg-3 > 0:
+                    remove arg-3 from {balance.%arg-2's uuid%}
+                    send "&eYou removed &6%arg-3% &efrom &6%arg-2%'s &ebalance." to player
+            else:
+                send "&eYou must select a player." to player
+        else if arg-1 is "reset" or "restart":
+            if arg-2 is set:
+                if arg-3 isn't set:
+                    send "&eYou have reset &6%arg-2%'s &ebalance." to player
+                    set {balance.%arg-2's uuid%} to 0
+            else:
+                send "&eYou must select a player." to player
+on death:
+   add 1 to {killstreak.%attacker%}
+every tick:
+    loop all players:
+        if {killstreak.%loop-player%} = 5:
+            if {killstreak51try.%loop-player%} is not set:
+                broadcast "&c&lSTREAK! &7By %loop-player% of 5 kills!"
+                set {killstreak51try.%loop-player%} to true
+on death:
+   set {killstreak.%player%} to 0
+   delete {killstreak51try.%player%} 
+   delete {killstreak01try.%player%}
+   delete {killstreak21try.%player%}
+   delete {bounty100::%player%}
+   delete {bounty50::%player%}
+       
+on death:
+   add 1 to {expmax::%attacker's uuid%}
+   add 5 to {exp::%attacker's uuid%}
+   remove 5 from {neededxp::%attacker's uuid%}
+   
+   
+every tick:
+    loop all players:
+        if {neededxp::%loop-player's uuid%} <= 0:
+            add {neededxp2::%loop-player's uuid%} to {neededxp::%loop-player's uuid%}
+            add 5 to {neededxp2::%loop-player's uuid%}
+            add 1 to {level::%loop-player's uuid%}
+            add {neededxp2::%loop-player's uuid%} to {balance.%loop-player's uuid%}
+            
+            
+           
+on join:
+   if {expmax::%player's uuid%} is not set:
+      set {expmax::%player's uuid%} to 15
+   if {exp::%player's uuid%} is not set:
+      set {exp::%player's uuid%} to 0
+every tick:
+    loop all players:
+        if {killstreak.%loop-player%} = 10:
+            if {killstreak01try.%loop-player%} is not set:
+                broadcast "&c&lSTREAK! &7By %loop-player% of 10 kills!"
+                set {killstreak01try.%loop-player%} to true
+every tick:
+    loop all players:
+        if {killstreak.%loop-player%} = 20:
+            if {killstreak21try.%loop-player%} is not set:
+                broadcast "&c&lSTREAK! &7By %loop-player% of 20 kills!"
+                set {killstreak21try.%loop-player%} to true
+every tick:
+    loop all players:
+        if {killstreak.%loop-player%} = 7:
+            if {bounty50::%loop-player%} is not set:
+                broadcast "&6&lBOUNTY! &7On %loop-player%" 
+                set {bounty50::%loop-player%} to true
+every tick:
+    loop all players:
+        if {killstreak.%loop-player%} = 28:
+            if {bounty100::%loop-player%} is not set:
+                broadcast "&6&lBOUNTY! &7On %loop-player%"
+                delete {bounty50::%loop-player%}
+                set {bounty100::%loop-player%} to true
+
+
+on damage:
+   if {bounty50::%victim%} is true:
+      send "&6&lBOUNTY! &7This player has a bounty of &650G&7!"
+   else:
+      if {bounty100::%victim%} is true:
+         send "&6&lBOUNTY! &7This player has a bounty of &6100G&7!"
+options:
+# Scoreboard
+    Title: &a&lGAVE &e&lTHE PIT
+	
+# The lines, you can use %{rank.%loop-player%}% for the users group, %balance of loop-player% for their balance, and %player% for their name.
+    Line1: &75/30/2019
+    Line2: ""
+    Line3: &fLevel: &7[&b%{level::%loop-player's uuid%}%&7]
+    Line4: &fNeeded XP: &b%{neededxp::%loop-player's uuid%}%
+    Line5: ""
+    Line6: &fGold: &6%{balance.%loop-player's uuid%}%
+    Line7: ""
+    Line8: &fStatus: %{status.%loop-player%}%
+    Line9: &cStreak: &7%{killstreak.%loop-player%}%
+    Line10: &egave.minehut.gg
+	
+#ScoreBoard (You can add lines)
+every second:
+    loop all players:
+        wipe loop-player's sidebar
+        set name of sidebar of loop-player to "{@Title}"
+        set score "{@Line1}" in sidebar of loop-player to 10
+        set score "{@Line2}" in sidebar of loop-player to 9
+        set score "{@Line3}" in sidebar of loop-player to 8
+        set score "{@Line4}" in sidebar of loop-player to 7
+        set score "{@Line5}" in sidebar of loop-player to 6
+        set score "{@Line6}" in sidebar of loop-player to 5
+        set score "{@Line7}" in sidebar of loop-player to 4
+        set score "{@Line8}" in sidebar of loop-player to 3
+        set score "{@Line9}" in sidebar of loop-player to 2
+        set score "{@Line10}" in sidebar of loop-player to 1
+        
+on join:
+   if {level::%player's uuid%} is not set:
+      set {level::%player's uuid%} to 1
+on damage:
+   set {status.%victim%} to "&cFighting"
+   set {status.%attacker%} to "&cFighting"
+on any movement:
+   if {status.%player%} is "&cFighting":
+      wait 5 seconds
+      set {status.%player%} to "&aIdling"
+
+on death:
+   set death message to ""
+on damage:
+   block below victim is diamond block:
+      cancel event
+      send "&2({[&aGAVE&2]}) &7You can't pvp in the spawn point!" to damager
+on damage:
+   block below victim is lapis block:
+      cancel event
+      send "&2({[&aGAVE&2]}) &7You can't pvp in the healing area!" to damager
+on damage:
+   block below victim is emerald block:
+      cancel event
+      send "&2({[&aGAVE&2]}) &7You can't pvp in the spawn point!" to damager
+on join:
+   make player say "/spawn"
+on join:
+   if player is not wearing armor:
+   if player is not wearing leather leggings:
+      equip player with chain leggings
+      equip player with iron boots
+      equip player with iron chestplate
+      give player 1 iron sword named "&fIron Sword"
+   else:
+      equip player with chain boots
+      equip player with iron chestplate
+      give player 1 iron sword named "&fIron Sword"
+on join:
+   if {neededxp::%player's uuid%} is not set:
+      set {neededxp::%player's uuid%} to 15
+   if {neededxp2::%player's uuid%} is not set:
+      set {neededxp2::%player's uuid%} to 15
+on step on lapis block:
+   heal the player
+   feed the player
+on command "/spawn":
+   if {status.%player%} is "&cFighting":
+      cancel event
+      send "&cYou are in combat!"
+on quit:
+   if {status.%player%} is "&cFighting":
+      kill the player
+every tick:
+    feed all players
+on spawn:
+   cancel event
+command /seen [<offlineplayer>]:
+    trigger:
+        if arg-1 is set:
+            if arg-1 is online:
+                send "&a%arg-1% &7is currently online on &2[&aGave&2]"
+            else:
+                if {lastseen::%arg-1%} is set:
+                    send "&a%arg-1% &7was last online at &a%{lastseen::%arg-1%}%"
+                else:
+                    send "&a%arg-1% &7has never joined the server"
+        else:
+            send "&cYou must include a player!"
+
+on quit:
+    set {lastseen::%player%} to now
+on join:
+   execute player command "/spawn"
+on first join:
+   make player say "/spawn"
+on first join:
+   execute player command "/spawn"

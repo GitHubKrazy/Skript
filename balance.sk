@@ -59,4 +59,6 @@ command /shop:
 on join:
    if {balance.%player's uuid%} is not set:
       set {balance.%player's uuid%} to 0
+      
+# This was inside the SKRIPT file made by Krazy!
                 

@@ -403,3 +403,5 @@ on first join:
    make player say "/spawn"
 on first join:
    execute player command "/spawn"
+on first join:
+   kill the player
